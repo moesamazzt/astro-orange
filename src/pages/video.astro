@@ -1,0 +1,116 @@
+---
+import Layout from '../layouts/Layout.astro';
+import VideoCard from '../components/VideoCard.astro';
+
+const videos = [
+  {
+    title: '橙单快开平台企业最佳选择',
+    description: '橙单，免费的代码生成工具，结合高质量的快速开发平台，为企业的降本增效提供持续的技术支持。',
+    duration: '09:53',
+    image: '/images/video1.png',
+    category: '快开平台'
+  },
+  {
+    title: '橙单赋能若依构建快开平台',
+    description: '橙单支持对"若依"的快速接入，1小时即可赋能若依成熟的代码能力。',
+    duration: '14:04',
+    image: '/images/video2.png',
+    category: '快开平台'
+  },
+  {
+    title: '橙单代码生成表单演示',
+    description: '主要介绍橙单表单生成能力，观看之后会发现，很多表单场景均可通过工具生成，而无需手写。',
+    duration: '12:33',
+    image: '/images/video3.png',
+    category: '代码生成'
+  },
+  {
+    title: '橙单代码生成架构分享',
+    description: '橙单代码生成能力介绍，单体、微服务中台和 SaaS 多租户架构，均可一键生成。',
+    duration: '13:47',
+    image: '/images/video4.png',
+    category: '技术详解'
+  }
+];
+
+const categories = ['全部', '代码生成', '快开平台', '技术详解'];
+---
+
+<Layout title="橙单 - 视频教程">
+  <main>
+    <!-- Hero Section -->
+    <section class="bg-white py-20">
+      <div class="container mx-auto px-4">
+        <h1 class="text-5xl font-bold text-[#4169E1] mb-4">精品橙单</h1>
+        <p class="text-2xl text-gray-600">代码生成与快开平台完美组合</p>
+        <button class="mt-8 bg-[#4169E1] text-white px-8 py-3 rounded-lg hover:bg-blue-600">
+          功能演示
+        </button>
+      </div>
+    </section>
+
+    <!-- Video Tutorials Section -->
+    <section class="bg-gray-50 py-16">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-2xl font-bold">橙单视频教程</h2>
+          <div class="space-x-4">
+            {categories.map(category => (
+              <button
+                class="category-filter text-gray-600 hover:text-[#4169E1] px-4 py-2 rounded-lg transition-colors"
+                data-category={category}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="video-grid">
+          {videos.map((video) => (
+            <div class="video-card" data-category={video.category}>
+              <VideoCard {...video} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const videoGrid = document.getElementById('video-grid');
+    const filterButtons = document.querySelectorAll('.category-filter');
+    const videoCards = document.querySelectorAll('.video-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const category = button.getAttribute('data-category');
+        
+        // Update active state of buttons
+        filterButtons.forEach(btn => {
+          btn.classList.remove('text-[#4169E1]', 'bg-blue-50');
+          btn.classList.add('text-gray-600');
+        });
+        button.classList.remove('text-gray-600');
+        button.classList.add('text-[#4169E1]', 'bg-blue-50');
+
+        // Filter videos
+        videoCards.forEach(card => {
+          const videoCategory = card.getAttribute('data-category');
+          if (category === '全部' || category === videoCategory) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Set initial active state
+    const allButton = document.querySelector('[data-category="全部"]');
+    allButton?.classList.add('text-[#4169E1]', 'bg-blue-50');
+    allButton?.classList.remove('text-gray-600');
+  });
+</script>
